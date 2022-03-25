@@ -10,6 +10,10 @@ public class Usuario {
     protected String correo;
     private ArrayList<Actividad> actividades = new ArrayList<>();
 
+    public Usuario (String nombre, String correo){
+        this.nombre = nombre;
+        this.correo = correo;
+    }
     public void recibirReporte() {
 
     }
@@ -20,4 +24,7 @@ public class Usuario {
         
     }
 
+    public String getName(){
+        return nombre;
+    }
 }
