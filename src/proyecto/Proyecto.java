@@ -3,6 +3,7 @@ package src.proyecto;
 
 import src.actividad.Actividad;
 import src.usuario.Duenio;
+import src.usuario.Participante;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ public class Proyecto {
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFinal;
-    private ArrayList<Actividad> Actividades;
+    private ArrayList<Actividad> actividades;
+    private ArrayList<Participante> participantes;
     private Duenio duenio;
     private int id;
 
@@ -22,11 +24,12 @@ public class Proyecto {
         this.descripcion = descripcion;
         this.duenio = duenio;
         this.id = id;
-        Actividades = new ArrayList<Actividad>();
+        actividades = new ArrayList<>();
+        participantes = new ArrayList<>();
     }
 
     public void addActividad(Actividad actividad) {
-        Actividades.add(actividad);
+        actividades.add(actividad);
     }
 
 
@@ -44,8 +47,12 @@ public class Proyecto {
 
     public String darInfoProyecto(){
         return ("\nNombre: "+nombre+"\nDescripción: "+descripcion
-                + "\nid: "+id+"\nDueño: "+duenio.getName()+"\n");
+                + "\nid: "+id+"\nDueño: "+duenio.getName()
+                +"\nCantidad de actividades:"+actividades.size()+"\n");
 
     }
 
+    public int getActividadesSize(){
+        return actividades.size();
+    }
 }

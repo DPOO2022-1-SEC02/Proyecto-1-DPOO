@@ -3,10 +3,8 @@ package src.consola;
 import src.proyecto.PrManager;
 import src.proyecto.Proyecto;
 import src.usuario.Duenio;
+import src.usuario.Usuario;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Consola {
@@ -14,20 +12,34 @@ public class Consola {
     Scanner entrada = new Scanner(System.in);
     PrManager manager = new PrManager();
 
+    Usuario usuarioActual;
+
     public static void main(String[] args) {
         Consola consola = new Consola();
+        consola.identificarUsuario();
         consola.ejecutarOpcion();
     }
 
     private void mostrarMenu() {
+
         System.out.println("""
-                ¡Bienvenido! :D, selecciona una de las opciones disponibles
+                ¡Selecciona una de las opciones disponibles
                 1. Crear un proyecto.
                 2. Ver información de un proyecto.
-                3. Ver información de las actividades de un proyecto.
-                4. Ver los participantes de un proyecto.
-                5. Generar un reporte de usuario.
+                3. Editar un proyecto (Editar y añadir actividades y participantes).
+                4. Ver información de las actividades de un proyecto.
+                5. Ver los participantes de un proyecto.
+                6. Generar un reporte de usuario.
                 0. Salir de la aplicación.""");
+
+    }
+
+
+    private void identificarUsuario() {
+        System.out.println("¡Bienvenido :D! Para empezar ingresa tus datos");
+        String nombre = input("Escribe tu nombre");
+        String correo = input("Escribe tu dirección de correo");
+        usuarioActual = new Usuario(nombre, correo);
 
     }
 
@@ -39,8 +51,10 @@ public class Consola {
             switch (opcion) {
                 case 1 -> crearProyecto();
                 case 2 -> darProyecto();
-                case 6 -> continuar = false;
+                case 3 -> editarProyecto();
+                case 0 -> continuar = false;
             }
+            System.out.println("\n");
         }
     }
 
@@ -51,10 +65,9 @@ public class Consola {
 
         String nameD = input("Ingresa el nombre del dueño");
         String emailD = input("Ingresa el correo del dueño");
-        Duenio duenio = new Duenio(nameD,emailD);
+        Duenio duenio = new Duenio(nameD, emailD);
 
         manager.crearProyecto(nombre, descripcion, duenio);
-
 
     }
 
@@ -69,6 +82,28 @@ public class Consola {
 
     }
 
+    private void editarProyecto() {
+        int id = Integer.parseInt(input("Ingresa el id del proyecto a modificar"));
+        usuarioActual.setProyecto(id);
+        mostrarMenuEdicion();
+    }
+
+    private void mostrarMenuEdicion() {
+        System.out.println("""
+                Selecciona una de las opciones disponibles:
+                1. Iniciar una Actividad
+                2. Finalizar una Actividad
+                3. Editar una Actividad""");
+    }
+
+    private void opcionEdicion() {
+        int seleccionado = Integer.parseInt(input("Selecciona una opción"));
+        switch (seleccionado) {
+            case 1 -> usuarioActual.inciarActividad();
+            case 2 -> usuarioActual.finalizarActividad();
+            case 3 -> usuarioActual.editarActividad();
+        }
+    }
 
     public String input(String mensaje) {
 
