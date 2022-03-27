@@ -33,8 +33,15 @@ public class Proyecto {
     }
 
 
-    public void darInfoActividades() {
-
+    public String darInfoActividades() {
+        String retorno = "";
+        int contador=1;
+        for (Actividad actividad : actividades) {
+            retorno += "\nActividad "+contador+"\n";
+            retorno += actividad.consultarInformacion()+"\n";
+            contador++;
+        }
+        return retorno;
     }
 
     public void darParticipantes() {
@@ -45,14 +52,14 @@ public class Proyecto {
 
     }
 
-    public String darInfoProyecto(){
-        return ("\nNombre: "+nombre+"\nDescripción: "+descripcion
-                + "\nid: "+id+"\nDueño: "+duenio.getName()
-                +"\nCantidad de actividades:"+actividades.size()+"\n");
+    public String darInfoProyecto() {
+        return ("\nNombre: " + nombre + "\nDescripción: " + descripcion
+                + "\nid: " + id + "\nDueño: " + duenio.getName()
+                + "\nCantidad de actividades:" + actividades.size() + "\n");
 
     }
 
-    public int getActividadesSize(){
+    public int getActividadesSize() {
         return actividades.size();
     }
 }

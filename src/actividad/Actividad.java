@@ -1,8 +1,6 @@
 package src.actividad;
 
 import src.tipoActividad;
-
-import java.sql.Time;
 import java.util.Date;
 
 public class Actividad {
@@ -12,26 +10,25 @@ public class Actividad {
     private tipoActividad tipo;
     private Date fechaInicio;
     private Date fechaFinal;
-    private Time horaIncio;
-    private Time horaFinal;
     private int id;
 
 
-    public Actividad(String correo,String titulo, String descripcion, tipoActividad tipo, Date fechaFinal, Time horaFinal,int id) {
+    public Actividad(String correo,String titulo, String descripcion, tipoActividad tipo, Date fechaFinal,int id) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.tipo = tipo;
         this.fechaFinal = fechaFinal;
-        this.horaFinal = horaFinal;
         this.id = id;
         this.correo = correo;
+
+        fechaInicio = new Date();
     }
 
     public String consultarInformacion() {
         return ("Título: " + titulo +
-                "Descripción: " + descripcion +
-                "Tipo: " + tipo +
-                "Fecha de Inicio: " + fechaInicio);
+                "\nDescripción: " + descripcion +
+                "\nTipo: " + tipo +
+                "\nFecha de Inicio: " + fechaInicio);
     }
 
 

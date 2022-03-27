@@ -18,29 +18,34 @@ public class Usuario {
     private ArrayList<Actividad> actividades = new ArrayList<>();
 
 
-    PrManager manager = new PrManager();
-
-
-    public void setProyecto(int id){
-        prActual = manager.getProyecto(id);
+    public void setProyecto(Proyecto proyectoEntrada) {
+        prActual = proyectoEntrada;
     }
 
-    public Usuario (String nombre, String correo){
+    public Usuario(String nombre, String correo) {
         this.nombre = nombre;
         this.correo = correo;
     }
+
     public void recibirReporte() {
 
     }
-    public void inciarActividad(String nombreActividad, tipoActividad tipo, String descripcion, Date fechaFinal, Time horaFinal){
-        Actividad actividad = new Actividad(correo,nombreActividad,descripcion,tipo,fechaFinal,horaFinal,prActual.getActividadesSize());
+
+    public void inciarActividad(String nombreActividad, tipoActividad tipo, String descripcion, Date fechaFinal) {
+        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipo, fechaFinal, prActual.getActividadesSize());
         prActual.addActividad(actividad);
     }
-    public void finalizarActividad(String correo,String nombreActividad){
+
+    public void iniciarActividadExt(String correo, String nombreActividad, tipoActividad tipo, String descripcion, Date fechaFinal) {
+        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipo, fechaFinal, prActual.getActividadesSize());
+        prActual.addActividad(actividad);
+    }
+
+    public void finalizarActividad(String correo, String nombreActividad) {
 
     }
 
-    public String getName(){
+    public String getName() {
         return nombre;
     }
 }
