@@ -1,11 +1,14 @@
 package src.consola;
 
+import src.actividad.Actividad;
 import src.proyecto.PrManager;
 import src.proyecto.Proyecto;
 import src.tipoActividad;
 import src.usuario.Duenio;
+import src.usuario.Participante;
 import src.usuario.Usuario;
 
+import javax.imageio.plugins.jpeg.JPEGImageReadParam;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,6 +61,7 @@ public class Consola {
                 case 2 -> darProyecto();
                 case 3 -> editarProyecto();
                 case 4 -> mostrarInfoActividades();
+                case 5 -> mostrarParticipantes();
                 case 0 -> continuar = false;
             }
             System.out.println("\n");
@@ -97,9 +101,10 @@ public class Consola {
     private void mostrarMenuEdicion() {
         System.out.println("""
                 \nSelecciona una opción:
-                1. Iniciar una Actividad
-                2. Finalizar una Actividad
-                3. Editar una Actividad
+                1. Iniciar una Actividad.
+                2. Finalizar una Actividad.
+                3. Editar una Actividad.
+                4. Agregar participantes.
                 0. Regresar al menu anterior""");
     }
 
@@ -110,7 +115,9 @@ public class Consola {
             int seleccionado = Integer.parseInt(input("Selecciona una opción"));
             switch (seleccionado) {
                 case 1 -> iniciarActividad();
-
+                case 2 -> terminarActividad();
+                case 3 -> editarActividad();
+                case 4 -> agregarParticipantes();
                 case 0 -> cont = false;
             }
         }
@@ -124,7 +131,6 @@ public class Consola {
         Date fechaFin;
 
 
-
         nombre = input("Escribe el nombre de la actividad");
         descripcion = input("Escribe la descripción de la actividad");
         strFecha = input("Escriba la fecha estimada de finalización (dia/mes/año)");
@@ -134,20 +140,81 @@ public class Consola {
         tipoActividad tipo = tipoActividad.Documentacion;
 
 
-        if (opcion==1){
-            usuarioActual.inciarActividad(nombre,tipo,descripcion,fechaFin);
-        }
-        else{
+        if (opcion == 1) {
+            usuarioActual.inciarActividad(nombre, tipo, descripcion, fechaFin);
+        } else {
             String correo = input("Escribe el correo del usuario");
-            usuarioActual.iniciarActividadExt(correo,nombre,tipo,descripcion,fechaFin);
+            usuarioActual.iniciarActividadExt(correo, nombre, tipo, descripcion, fechaFin);
         }
 
     }
 
-    private void mostrarInfoActividades(){
+    private void terminarActividad() {
+        int id = Integer.parseInt(input("Escribe el id del proyecto"));
+        int idA = Integer.parseInt(input("Escribe el id de la actividad"));
+        Proyecto prActual = manager.getProyecto(id);
+        Actividad acActual = prActual.getActividad(id);
+        acActual.terminar();
+    }
+
+
+    private void mostrarInfoActividades() {
         int id = Integer.parseInt(input("Escribe el id del proyecto a consultar"));
-        Proyecto proyectoActual = manager.getProyecto(id);
-        System.out.println(proyectoActual.darInfoActividades());
+        Proyecto actual = manager.getProyecto(id);
+        System.out.println(actual.darInfoActividades());
+    }
+
+    private void agregarParticipantes() {
+        int id = Integer.parseInt(input("Escribe el id del proyecto al que quieres añadir participantes"));
+        Proyecto prActual = manager.getProyecto(id);
+        Duenio duenio = prActual.getDuenio();
+        if (usuarioActual.equals(duenio)) {
+            String nombre, correo;
+            nombre = input("Escribe el nombre del nuevo usuario");
+            correo = input("Escribe el correo del nuevo usuario");
+            Participante agregar = new Participante(nombre, correo);
+            prActual.addParticipante(agregar);
+        } else {
+            System.out.println("Para hacer esto debes ser el dueño del proyecto.");
+        }
+
+    }
+
+    private void editarActividad() throws Exception {
+        String strFecha;
+        boolean continuar = true;
+
+        int id = Integer.parseInt(input("Escribe el id del proyecto"));
+        int idA = Integer.parseInt(input("Escribe el id de la actividad"));
+        Proyecto prActual = manager.getProyecto(id);
+        Actividad acActual = prActual.getActividad(id);
+
+        while (continuar) {
+            int opcion = Integer.parseInt(input("""
+                    1. Cambiar fecha de inicio.
+                    2. Cambiar fecha de finalización
+                    0. volver"""));
+            if (opcion == 1) {
+                strFecha = input("Escriba la fecha de inicio (dia/mes/año)");
+                Date fechaInicio = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                acActual.setFechaInicio(fechaInicio);
+            } else if (opcion == 2) {
+                strFecha = input("Escriba la fecha de finalización (dia/mes/año)");
+                Date fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                acActual.setFechaFin(fechaFin);
+            } else {
+                continuar = false;
+            }
+        }
+
+    }
+
+    private void mostrarParticipantes(){
+        int id = Integer.parseInt(input("Escribe el id del proyecto"));
+        Proyecto prActual = manager.getProyecto(id);
+        String participantes = prActual.darParticipantes();
+        System.out.println(participantes);
+
     }
 
     public String input(String mensaje) {

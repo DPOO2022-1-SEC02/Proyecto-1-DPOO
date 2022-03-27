@@ -8,6 +8,7 @@ import src.tipoActividad;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class Usuario {
     protected String nombre;
@@ -17,6 +18,13 @@ public class Usuario {
 
     private ArrayList<Actividad> actividades = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object usuario2){
+        if (this.getEmail().equals(((Usuario) usuario2).getEmail())){
+            return true;
+        }
+        return false;
+    }
 
     public void setProyecto(Proyecto proyectoEntrada) {
         prActual = proyectoEntrada;
@@ -41,11 +49,20 @@ public class Usuario {
         prActual.addActividad(actividad);
     }
 
+    public String consultarInformacion(){
+        return("Nombre: "+nombre
+        +"\nCorreo: "+correo+"\n");
+    }
+
     public void finalizarActividad(String correo, String nombreActividad) {
 
     }
 
     public String getName() {
         return nombre;
+    }
+
+    public String getEmail(){
+        return correo;
     }
 }

@@ -35,6 +35,10 @@ public class Proyecto {
 
     public String darInfoActividades() {
         String retorno = "";
+        if (actividades.isEmpty()){
+            return "No hay actividades";
+        }
+
         int contador=1;
         for (Actividad actividad : actividades) {
             retorno += "\nActividad "+contador+"\n";
@@ -44,8 +48,19 @@ public class Proyecto {
         return retorno;
     }
 
-    public void darParticipantes() {
-
+    public String darParticipantes() {
+        String retorno = "Dueño: "+duenio.getName();
+        if(participantes.isEmpty()){
+            retorno+="\nNo hay participantes";
+            return retorno;
+        }
+        int contador=1;
+        for (Participante participante : participantes) {
+            retorno += "\nParticipante "+contador+"\n";
+            retorno += participante.consultarInformacion();
+            contador++;
+        }
+        return retorno;
     }
 
     public void darReporte(String correo) {
@@ -61,5 +76,17 @@ public class Proyecto {
 
     public int getActividadesSize() {
         return actividades.size();
+    }
+
+    public Duenio getDuenio(){
+        return duenio;
+    }
+
+    public void addParticipante(Participante participante){
+        participantes.add(participante);
+    }
+
+    public Actividad getActividad(int id){
+        return actividades.get(id);
     }
 }

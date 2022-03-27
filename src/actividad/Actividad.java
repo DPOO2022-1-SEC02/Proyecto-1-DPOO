@@ -1,6 +1,9 @@
 package src.actividad;
 
 import src.tipoActividad;
+
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 
 public class Actividad {
@@ -11,9 +14,12 @@ public class Actividad {
     private Date fechaInicio;
     private Date fechaFinal;
     private int id;
+    private int tiempoTrabajo;
+    private Instant starts,ends;
 
 
-    public Actividad(String correo,String titulo, String descripcion, tipoActividad tipo, Date fechaFinal,int id) {
+
+    public Actividad(String correo, String titulo, String descripcion, tipoActividad tipo, Date fechaFinal, int id) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -22,6 +28,28 @@ public class Actividad {
         this.correo = correo;
 
         fechaInicio = new Date();
+        tiempoTrabajo = 0;
+    }
+
+
+    public void iniciarTrabajo(){
+        starts = Instant.now();
+    }
+
+    public void terminarTrabajo(){
+        ends = Instant.now();
+        tiempoTrabajo+=(Duration.between(starts,ends).getSeconds());
+    }
+
+    public void setFechaInicio(Date fecha){
+        fechaInicio = fecha;
+    }
+    public void setFechaFin(Date fecha){
+        fechaFinal=fecha;
+    }
+
+    public void terminar() {
+        fechaFinal = new Date();
     }
 
     public String consultarInformacion() {
@@ -30,7 +58,6 @@ public class Actividad {
                 "\nTipo: " + tipo +
                 "\nFecha de Inicio: " + fechaInicio);
     }
-
 
 
 }
