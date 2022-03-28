@@ -88,7 +88,7 @@ public class Proyecto {
         participantes.add(participante);
     }
 
-    public Actividad getActividad(int id){
-        return actividades.get(id);
+    public Actividad getActividad(String titulo){
+        return actividades.get(titulo);
     }
 }

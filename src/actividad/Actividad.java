@@ -18,8 +18,8 @@ public class Actividad {
     private Date fechaFinal;
     private int id;
     private int tiempoTrabajo;
-    private Instant starts,ends;
-    private HashMap<LocalDate,Integer> trabajoDiario;
+    private Instant starts, ends;
+    private HashMap<LocalDate, Integer> trabajoDiario;
 
 
     public Actividad(String correo, String titulo, String descripcion, tipoActividad tipo, Date fechaFinal, int id) {
@@ -34,28 +34,29 @@ public class Actividad {
     }
 
 
-    public void iniciarTrabajo(){
+    public void iniciarTrabajo() {
         starts = Instant.now();
     }
 
-    public String getTitulo(){
+    public String getTitulo() {
         return titulo;
     }
 
-    public void terminarTrabajo(){
+    public void terminarTrabajo() {
         ends = Instant.now();
         LocalDate hoy = LocalDate.now();
-        tiempoTrabajo+=(Duration.between(starts,ends).getSeconds());
-        int trabajado = trabajoDiario.getOrDefault(hoy,0);
-        trabajado+=tiempoTrabajo;
-        trabajoDiario.put(hoy,trabajado);
+        tiempoTrabajo += (Duration.between(starts, ends).getSeconds());
+        int trabajado = trabajoDiario.getOrDefault(hoy, 0);
+        trabajado += tiempoTrabajo;
+        trabajoDiario.put(hoy, trabajado);
     }
 
-    public void setFechaInicio(Date fecha){
+    public void setFechaInicio(Date fecha) {
         fechaInicio = fecha;
     }
-    public void setFechaFin(Date fecha){
-        fechaFinal=fecha;
+
+    public void setFechaFin(Date fecha) {
+        fechaFinal = fecha;
     }
 
     public void terminar() {

@@ -17,10 +17,12 @@ import java.util.Scanner;
 
 public class Consola {
 
+    int cantidadProyectos = 0;
     Scanner entrada = new Scanner(System.in);
     PrManager manager = new PrManager();
 
     Usuario usuarioActual;
+
 
     public static void main(String[] args) throws Exception {
         Consola consola = new Consola();
@@ -29,7 +31,6 @@ public class Consola {
     }
 
     private void mostrarMenu() {
-
         System.out.println("""
                 ¡Selecciona una de las opciones disponibles!
                 1. Crear un proyecto.
@@ -39,6 +40,7 @@ public class Consola {
                 5. Ver los participantes de un proyecto.
                 6. Generar un reporte de usuario.
                 0. Salir de la aplicación.""");
+
 
     }
 
@@ -68,6 +70,7 @@ public class Consola {
         }
     }
 
+
     private void crearProyecto() {
         String nombre, descripcion;
         nombre = input("Escribe el nombre del proyecto");
@@ -77,8 +80,9 @@ public class Consola {
         String emailD = input("Ingresa el correo del dueño");
         Duenio duenio = new Duenio(nameD, emailD);
 
-        manager.crearProyecto(nombre, descripcion, duenio);
 
+        System.out.println("Proyecto creado exitosamente. El id es: " + cantidadProyectos);
+        cantidadProyectos++;
     }
 
 
@@ -105,6 +109,8 @@ public class Consola {
                 2. Finalizar una Actividad.
                 3. Editar una Actividad.
                 4. Agregar participantes.
+                5. Iniciar a trabajar en una actividad.
+                6. Finalizar trabajo en una actividad.
                 0. Regresar al menu anterior""");
     }
 
@@ -118,6 +124,8 @@ public class Consola {
                 case 2 -> terminarActividad();
                 case 3 -> editarActividad();
                 case 4 -> agregarParticipantes();
+                case 5 -> iniciarTrabajo();
+                case 6 -> terminarTrabajo();
                 case 0 -> cont = false;
             }
         }
@@ -151,9 +159,9 @@ public class Consola {
 
     private void terminarActividad() {
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
-        int idA = Integer.parseInt(input("Escribe el id de la actividad"));
+        String tituloA = input("Escribe el título de la actividad");
         Proyecto prActual = manager.getProyecto(id);
-        Actividad acActual = prActual.getActividad(id);
+        Actividad acActual = prActual.getActividad(tituloA);
         acActual.terminar();
     }
 
@@ -185,9 +193,9 @@ public class Consola {
         boolean continuar = true;
 
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
-        int idA = Integer.parseInt(input("Escribe el id de la actividad"));
+        String tituloA = input("Escribe el titulo de la actividad");
         Proyecto prActual = manager.getProyecto(id);
-        Actividad acActual = prActual.getActividad(id);
+        Actividad acActual = prActual.getActividad(tituloA);
 
         while (continuar) {
             int opcion = Integer.parseInt(input("""
@@ -209,12 +217,30 @@ public class Consola {
 
     }
 
-    private void mostrarParticipantes(){
+    private void mostrarParticipantes() {
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
         Proyecto prActual = manager.getProyecto(id);
         String participantes = prActual.darParticipantes();
         System.out.println(participantes);
 
+    }
+
+    private void iniciarTrabajo() {
+        Actividad actualAc = getActividad();
+        actualAc.iniciarTrabajo();
+    }
+
+    private void terminarTrabajo() {
+        Actividad actualAc = getActividad();
+        actualAc.terminarTrabajo();
+    }
+
+    private Actividad getActividad() {
+        int id = Integer.parseInt(input("Escribe el id del proyecto"));
+        String titulo = input("Escribe el título de la actividad");
+        Proyecto actual = manager.getProyecto(id);
+        Actividad actualAc = actual.getActividad(titulo);
+        return actualAc;
     }
 
     public String input(String mensaje) {
