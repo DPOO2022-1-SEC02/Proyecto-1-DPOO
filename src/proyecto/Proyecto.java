@@ -8,13 +8,14 @@ import src.usuario.Participante;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Proyecto {
     private String nombre;
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFinal;
-    private ArrayList<Actividad> actividades;
+    private HashMap<String,Actividad> actividades;
     private ArrayList<Participante> participantes;
     private Duenio duenio;
     private int id;
@@ -24,12 +25,12 @@ public class Proyecto {
         this.descripcion = descripcion;
         this.duenio = duenio;
         this.id = id;
-        actividades = new ArrayList<>();
+        actividades = new HashMap<>();
         participantes = new ArrayList<>();
     }
 
     public void addActividad(Actividad actividad) {
-        actividades.add(actividad);
+        actividades.put(actividad.getTitulo(),actividad);
     }
 
 
@@ -40,7 +41,8 @@ public class Proyecto {
         }
 
         int contador=1;
-        for (Actividad actividad : actividades) {
+        for (String titulo : actividades.keySet()) {
+            Actividad actividad = actividades.get(titulo);
             retorno += "\nActividad "+contador+"\n";
             retorno += actividad.consultarInformacion()+"\n";
             contador++;
