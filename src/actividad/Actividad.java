@@ -2,14 +2,14 @@ package src.actividad;
 
 import src.tipoActividad;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Actividad {
+public class Actividad implements Serializable {
     private String titulo;
     private String descripcion;
     private String correo;
@@ -34,7 +34,7 @@ public class Actividad {
     }
 
 
-    public void iniciarTrabajo() {
+    public void initCronometro() {
         starts = Instant.now();
     }
 
@@ -42,7 +42,7 @@ public class Actividad {
         return titulo;
     }
 
-    public void terminarTrabajo() {
+    public void stopCronometro() {
         ends = Instant.now();
         LocalDate hoy = LocalDate.now();
         tiempoTrabajo += (Duration.between(starts, ends).getSeconds());
@@ -70,5 +70,11 @@ public class Actividad {
                 "\nFecha de Inicio: " + fechaInicio);
     }
 
+   /* private String infoDias(){
+        for (:
+             ) {
 
+        }*/
 }
+
+

@@ -8,29 +8,34 @@ import src.usuario.Duenio;
 import src.usuario.Participante;
 import src.usuario.Usuario;
 
-import javax.imageio.plugins.jpeg.JPEGImageReadParam;
-import java.sql.Time;
-import java.text.ParseException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class Consola {
+public class Consola implements Serializable {
 
     int cantidadProyectos = 0;
     Scanner entrada = new Scanner(System.in);
     PrManager manager = new PrManager();
-
     Usuario usuarioActual;
 
 
     public static void main(String[] args) throws Exception {
+
         Consola consola = new Consola();
+
+
         consola.identificarUsuario();
         consola.ejecutarOpcion();
+
+
+
     }
 
     private void mostrarMenu() {
+
+
         System.out.println("""
                 ¡Selecciona una de las opciones disponibles!
                 1. Crear un proyecto.
@@ -40,6 +45,8 @@ public class Consola {
                 5. Ver los participantes de un proyecto.
                 6. Generar un reporte de usuario.
                 0. Salir de la aplicación.""");
+
+
 
 
     }
@@ -54,6 +61,20 @@ public class Consola {
     }
 
     private void ejecutarOpcion() throws Exception {
+
+        try{
+
+        FileInputStream file = new FileInputStream("guardado.ser");
+        ObjectInputStream in = new ObjectInputStream(file);
+        manager = (PrManager)in.readObject();
+            System.out.println("Info cargada");
+        }
+        catch (IOException ex){
+            System.out.println("IOException");
+        }
+
+
+
         boolean continuar = true;
         while (continuar) {
             mostrarMenu();
@@ -64,7 +85,15 @@ public class Consola {
                 case 3 -> editarProyecto();
                 case 4 -> mostrarInfoActividades();
                 case 5 -> mostrarParticipantes();
-                case 0 -> continuar = false;
+                case 0 -> {
+                    FileOutputStream file = new FileOutputStream("guardado.ser");
+                    ObjectOutputStream out = new ObjectOutputStream(file);
+                    out.writeObject(manager);
+                    out.close();
+                    file.close();
+                    System.out.println("Info guardada.");
+                    continuar=false;
+                }
             }
             System.out.println("\n");
         }
@@ -79,7 +108,7 @@ public class Consola {
         String nameD = input("Ingresa el nombre del dueño");
         String emailD = input("Ingresa el correo del dueño");
         Duenio duenio = new Duenio(nameD, emailD);
-
+        manager.crearProyecto(nombre,descripcion,duenio);
 
         System.out.println("Proyecto creado exitosamente. El id es: " + cantidadProyectos);
         cantidadProyectos++;
@@ -227,12 +256,12 @@ public class Consola {
 
     private void iniciarTrabajo() {
         Actividad actualAc = getActividad();
-        actualAc.iniciarTrabajo();
+        actualAc.initCronometro();
     }
 
     private void terminarTrabajo() {
         Actividad actualAc = getActividad();
-        actualAc.terminarTrabajo();
+        actualAc.stopCronometro();
     }
 
     private Actividad getActividad() {

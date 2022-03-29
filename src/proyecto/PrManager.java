@@ -2,13 +2,12 @@ package src.proyecto;
 
 import src.usuario.Duenio;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class PrManager {
+public class PrManager implements Serializable {
 
 
-    Scanner entrada = new Scanner(System.in);
 
     private ArrayList<Proyecto> proyectos;
 

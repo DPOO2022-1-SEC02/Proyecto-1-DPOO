@@ -5,12 +5,13 @@ import src.proyecto.PrManager;
 import src.proyecto.Proyecto;
 import src.tipoActividad;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
-public class Usuario {
+public class Usuario implements Serializable {
     protected String nombre;
     protected String correo;
     protected Proyecto prActual;
@@ -42,6 +43,7 @@ public class Usuario {
     public void inciarActividad(String nombreActividad, tipoActividad tipo, String descripcion, Date fechaFinal) {
         Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipo, fechaFinal, prActual.getActividadesSize());
         prActual.addActividad(actividad);
+        actividades.add(actividad);
     }
 
     public void iniciarActividadExt(String correo, String nombreActividad, tipoActividad tipo, String descripcion, Date fechaFinal) {
@@ -56,6 +58,10 @@ public class Usuario {
 
     public void finalizarActividad(String correo, String nombreActividad) {
 
+    }
+
+    public void addActividad(Actividad actividad){
+        actividades.add(actividad);
     }
 
     public String getName() {

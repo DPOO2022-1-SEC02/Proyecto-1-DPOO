@@ -5,12 +5,14 @@ import src.actividad.Actividad;
 import src.usuario.Duenio;
 import src.usuario.Participante;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Proyecto {
+public class Proyecto implements Serializable {
     private String nombre;
     private String descripcion;
     private Date fechaInicio;
