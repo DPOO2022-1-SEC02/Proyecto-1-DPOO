@@ -31,6 +31,7 @@ public class Actividad implements Serializable {
         this.correo = correo;
         fechaInicio = new Date();
         tiempoTrabajo = 0;
+        trabajoDiario = new HashMap<>();
     }
 
 
@@ -45,7 +46,7 @@ public class Actividad implements Serializable {
     public void stopCronometro() {
         ends = Instant.now();
         LocalDate hoy = LocalDate.now();
-        tiempoTrabajo += (Duration.between(starts, ends).getSeconds());
+        tiempoTrabajo += (Duration.between(starts, ends).getSeconds()) / 60;
         int trabajado = trabajoDiario.getOrDefault(hoy, 0);
         trabajado += tiempoTrabajo;
         trabajoDiario.put(hoy, trabajado);
@@ -64,17 +65,24 @@ public class Actividad implements Serializable {
     }
 
     public String consultarInformacion() {
-        return ("Título: " + titulo +
+        String retorno = "Título: " + titulo +
                 "\nDescripción: " + descripcion +
                 "\nTipo: " + tipo +
-                "\nFecha de Inicio: " + fechaInicio);
+                "\nFecha de Inicio: " + fechaInicio +
+                "\n----------Tiempos de trabajo-----------------\n" +
+                infoDias();
+        return (retorno);
     }
 
-   /* private String infoDias(){
-        for (:
-             ) {
-
-        }*/
+    private String infoDias() {
+        int tiempo;
+        String info = "";
+        for (LocalDate dia : trabajoDiario.keySet()) {
+            info += dia + ": ";
+            info += trabajoDiario.get(dia) + " minutos";
+        }
+        return info;
+    }
 }
 
 

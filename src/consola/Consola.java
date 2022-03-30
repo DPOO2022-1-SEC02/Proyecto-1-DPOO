@@ -257,11 +257,13 @@ public class Consola implements Serializable {
     private void iniciarTrabajo() {
         Actividad actualAc = getActividad();
         actualAc.initCronometro();
+        System.out.println("Sesión iniciada exitosamente.");
     }
 
     private void terminarTrabajo() {
         Actividad actualAc = getActividad();
         actualAc.stopCronometro();
+        System.out.println("Sesión de trabajo terminada.");
     }
 
     private Actividad getActividad() {
