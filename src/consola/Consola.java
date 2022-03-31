@@ -1,9 +1,9 @@
-package src.consola;
+package consola;
 
-import src.modelo.Actividad;
-import src.modelo.PrManager;
-import src.modelo.Proyecto;
-import src.modelo.Usuario;
+import modelo.Actividad;
+import modelo.PrManager;
+import modelo.Proyecto;
+import modelo.Usuario;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ public class Consola implements Serializable {
 
 
         System.out.println("""
-                ¡Selecciona una de las opciones disponibles!
+                \n¡Selecciona una de las opciones disponibles!
                 1. Crear un proyecto.
                 2. Ver información de un proyecto.
                 3. Editar un proyecto (Editar y añadir actividades y participantes).
@@ -44,11 +44,11 @@ public class Consola implements Serializable {
 
         try {
 
-            FileInputStream file = new FileInputStream("guardado.ser");
+            FileInputStream file = new FileInputStream("data/guardado.ser");
             ObjectInputStream in = new ObjectInputStream(file);
             manager = (PrManager) in.readObject();
             System.out.println("Info cargada");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println("No se han podido cargar datos anteriores. ");
         }
 
@@ -83,7 +83,7 @@ public class Consola implements Serializable {
     }
 
     private void guardarInfo() throws Exception {
-        FileOutputStream file = new FileOutputStream("guardado.ser");
+        FileOutputStream file = new FileOutputStream("data/guardado.ser");
         ObjectOutputStream out = new ObjectOutputStream(file);
         out.writeObject(manager);
         out.close();

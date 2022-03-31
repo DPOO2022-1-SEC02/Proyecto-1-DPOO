@@ -1,4 +1,4 @@
-package src.modelo;
+package modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ public class Usuario implements Serializable {
     private ArrayList<Actividad> actividades = new ArrayList<>();
 
     @Override
-    public boolean equals(Object usuario2){
-        if (this.getEmail().equals(((Usuario) usuario2).getEmail())){
+    public boolean equals(Object usuario2) {
+        if (this.getEmail().equals(((Usuario) usuario2).getEmail())) {
             return true;
         }
         return false;
@@ -33,7 +33,7 @@ public class Usuario implements Serializable {
     }
 
     public void inciarActividad(String nombreActividad, String tipoActividad, String descripcion) {
-        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipoActividad,  prActual.getActividadesSize());
+        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipoActividad, prActual.getActividadesSize());
         prActual.addActividad(actividad);
         actividades.add(actividad);
     }
@@ -43,20 +43,20 @@ public class Usuario implements Serializable {
         prActual.addActividad(actividad);
     }
 
-    public String consultarInformacion(){
-        return("Nombre: "+nombre
-        +"\nCorreo: "+correo+"\n");
+    public String consultarInformacion() {
+        return ("Nombre: " + nombre
+                + "\nCorreo: " + correo + "\n");
     }
 
     public void finalizarActividad(String correo, String nombreActividad) {
 
     }
 
-    public Proyecto getPrActual(){
+    public Proyecto getPrActual() {
         return prActual;
     }
 
-    public void addActividad(Actividad actividad){
+    public void addActividad(Actividad actividad) {
         actividades.add(actividad);
     }
 
@@ -64,7 +64,7 @@ public class Usuario implements Serializable {
         return nombre;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return correo;
     }
 }
