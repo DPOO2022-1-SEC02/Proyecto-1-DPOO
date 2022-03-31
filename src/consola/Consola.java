@@ -1,9 +1,9 @@
 package src.consola;
 
-import src.actividad.Actividad;
-import src.proyecto.PrManager;
-import src.proyecto.Proyecto;
-import src.usuario.Usuario;
+import src.modelo.Actividad;
+import src.modelo.PrManager;
+import src.modelo.Proyecto;
+import src.modelo.Usuario;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -17,16 +17,11 @@ public class Consola implements Serializable {
     PrManager manager = new PrManager();
     Usuario usuarioActual;
 
-
     public static void main(String[] args) throws Exception {
 
         Consola consola = new Consola();
-
-
         consola.identificarUsuario();
         consola.ejecutarOpcion();
-
-
     }
 
     private void mostrarMenu() {
@@ -70,17 +65,18 @@ public class Consola implements Serializable {
         boolean continuar = true;
         while (continuar) {
             mostrarMenu();
-            int opcion = Integer.parseInt(input("Por favor selecciona una opción"));
+            String opcion = input("Por favor selecciona una opción");
             switch (opcion) {
-                case 1 -> crearProyecto();
-                case 2 -> darProyecto();
-                case 3 -> editarProyecto();
-                case 4 -> mostrarInfoActividades();
-                case 5 -> mostrarParticipantes();
-                case 0 -> {
+                case "1" -> crearProyecto();
+                case "2" -> darProyecto();
+                case "3" -> editarProyecto();
+                case "4" -> mostrarInfoActividades();
+                case "5" -> mostrarParticipantes();
+                case "0" -> {
                     guardarInfo();
                     continuar = false;
                 }
+                default -> System.out.println("Por favor selecciona una opción válida");
             }
             System.out.println("\n");
         }
@@ -97,15 +93,14 @@ public class Consola implements Serializable {
 
 
     private void crearProyecto() throws Exception {
-        String nombre, descripcion, strFecha;
+        String nombre, descripcion, strFecha, nameD, emailD;
+        Date fechaFin;
         nombre = input("Escribe el nombre del proyecto");
         descripcion = input("Escribe la descripción del proyecto");
 
-        String nameD = input("Ingresa el nombre del dueño");
-        String emailD = input("Ingresa el correo del dueño");
+        nameD = input("Ingresa el nombre del dueño");
+        emailD = input("Ingresa el correo del dueño");
         Usuario duenio = new Usuario(nameD, emailD);
-
-        Date fechaFin;
 
         strFecha = input("Escriba la fecha estimada de finalización (dia/mes/año)");
         fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
@@ -141,7 +136,6 @@ public class Consola implements Serializable {
         id = Integer.parseInt(input("ingrese el id del proyecto"));
         Proyecto seleccionado = manager.getProyecto(id);
 
-        //TODO: imprimir esto bien
         System.out.println(seleccionado.darInfoProyecto());
 
     }
@@ -168,15 +162,16 @@ public class Consola implements Serializable {
         boolean cont = true;
         while (cont) {
             mostrarMenuEdicion();
-            int seleccionado = Integer.parseInt(input("Selecciona una opción"));
+            String seleccionado = (input("Selecciona una opción"));
             switch (seleccionado) {
-                case 1 -> iniciarActividad();
-                case 2 -> terminarActividad();
-                case 3 -> editarActividad();
-                case 4 -> agregarParticipantes();
-                case 5 -> iniciarTrabajo();
-                case 6 -> terminarTrabajo();
-                case 0 -> cont = false;
+                case "1" -> iniciarActividad();
+                case "2" -> terminarActividad();
+                case "3" -> editarActividad();
+                case "4" -> agregarParticipantes();
+                case "5" -> iniciarTrabajo();
+                case "6" -> terminarTrabajo();
+                case "0" -> cont = false;
+                default -> System.out.println("Selecciona una opción valida");
             }
         }
     }
@@ -284,20 +279,26 @@ public class Consola implements Serializable {
         Actividad acActual = prActual.getActividad(tituloA);
 
         while (continuar) {
-            int opcion = Integer.parseInt(input("""
+            String opcion = (input("""
                     1. Cambiar fecha de inicio.
                     2. Cambiar fecha de finalización
                     0. volver"""));
-            if (opcion == 1) {
-                strFecha = input("Escriba la fecha de inicio (dia/mes/año)");
-                Date fechaInicio = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                acActual.setFechaInicio(fechaInicio);
-            } else if (opcion == 2) {
-                strFecha = input("Escriba la fecha de finalización (dia/mes/año)");
-                Date fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                acActual.setFechaFin(fechaFin);
-            } else {
-                continuar = false;
+
+            switch (opcion) {
+                case "1" -> {
+                    strFecha = input("Escriba la fecha de inicio (dia/mes/año)");
+                    Date fechaInicio = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    acActual.setFechaInicio(fechaInicio);
+                }
+                case "2" -> {
+                    strFecha = input("Escriba la fecha de finalización (dia/mes/año)");
+                    Date fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    acActual.setFechaFin(fechaFin);
+                }
+                case "0" -> {
+                    continuar = false;
+                }
+                default -> System.out.println("Seleccione una opción válida");
             }
         }
 
@@ -311,6 +312,7 @@ public class Consola implements Serializable {
 
     }
 
+    //Funciones para iniciar y terminar el trabajo en una actividad.
     private void iniciarTrabajo() {
         Actividad actualAc = getActividad();
         actualAc.initCronometro();
@@ -323,12 +325,14 @@ public class Consola implements Serializable {
         System.out.println("Sesión de trabajo terminada.");
     }
 
+    //Funciones que consiguen información.
     private Actividad getActividad() {
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
         String titulo = input("Escribe el título de la actividad");
         Proyecto actual = manager.getProyecto(id);
         return actual.getActividad(titulo);
     }
+
 
     public String input(String mensaje) {
 

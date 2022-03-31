@@ -1,4 +1,4 @@
-package src.actividad;
+package src.modelo;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -10,13 +10,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Actividad implements Serializable {
-    private String titulo;
-    private String descripcion;
-    private String correo;
+    private final String titulo;
+    private final String descripcion;
+    private final String correo;
     private String tipoActividad;
     private Date fechaInicio;
     private Date fechaFinal;
-    private int id;
     private int tiempoTrabajo;
     private int trabajoTotal;
     private Instant starts, ends;
@@ -29,7 +28,6 @@ public class Actividad implements Serializable {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.tipoActividad = tipoActividad;
-        this.id = id;
         this.correo = correo;
         fechaInicio = new Date();
         tiempoTrabajo = 0;

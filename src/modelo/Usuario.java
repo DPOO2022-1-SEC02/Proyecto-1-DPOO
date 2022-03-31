@@ -1,7 +1,4 @@
-package src.usuario;
-
-import src.actividad.Actividad;
-import src.proyecto.Proyecto;
+package src.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;

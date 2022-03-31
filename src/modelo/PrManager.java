@@ -1,6 +1,4 @@
-package src.proyecto;
-
-import src.usuario.Usuario;
+package src.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,11 +1,9 @@
-package src.proyecto;
+package src.modelo;
 
-
-import src.actividad.Actividad;
-import src.usuario.Usuario;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 
