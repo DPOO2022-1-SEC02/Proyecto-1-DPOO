@@ -4,6 +4,7 @@ import src.usuario.Duenio;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PrManager implements Serializable {
 
@@ -16,8 +17,8 @@ public class PrManager implements Serializable {
     }
 
 
-    public Proyecto crearProyecto(String nombre, String descripcion, Duenio duenio) {
-        Proyecto retorno = new Proyecto(nombre, descripcion, duenio,proyectos.size());
+    public Proyecto crearProyecto(String nombre, String descripcion, Duenio duenio, Date fechaFin) {
+        Proyecto retorno = new Proyecto(nombre, descripcion, duenio,proyectos.size(),fechaFin);
         proyectos.add(retorno);
         return retorno;
     }

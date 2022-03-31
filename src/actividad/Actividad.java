@@ -1,11 +1,11 @@
 package src.actividad;
 
-import src.tipoActividad;
-
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -13,25 +13,36 @@ public class Actividad implements Serializable {
     private String titulo;
     private String descripcion;
     private String correo;
-    private tipoActividad tipo;
+    private String tipoActividad;
     private Date fechaInicio;
     private Date fechaFinal;
     private int id;
     private int tiempoTrabajo;
+    private int trabajoTotal;
     private Instant starts, ends;
     private HashMap<LocalDate, Integer> trabajoDiario;
+    private ArrayList<Date[]> fechas;
+    private boolean terminado;
 
 
-    public Actividad(String correo, String titulo, String descripcion, tipoActividad tipo, Date fechaFinal, int id) {
+    public Actividad(String correo, String titulo, String descripcion, String tipoActividad, int id) {
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.fechaFinal = fechaFinal;
+        this.tipoActividad = tipoActividad;
         this.id = id;
         this.correo = correo;
         fechaInicio = new Date();
         tiempoTrabajo = 0;
         trabajoDiario = new HashMap<>();
+        trabajoTotal=0;
+        fechas = new ArrayList<>();
+        terminado = false;
+    }
+
+    public void nuevoRegistro(Date fechaInicio,Date fechaFinal){
+        Date[] registro = {fechaInicio,fechaFinal};
+        trabajoTotal+=(Duration.between(fechaInicio.toInstant(), fechaFinal.toInstant()).getSeconds())/60;
+        fechas.add(registro);
     }
 
 
@@ -50,6 +61,7 @@ public class Actividad implements Serializable {
         int trabajado = trabajoDiario.getOrDefault(hoy, 0);
         trabajado += tiempoTrabajo;
         trabajoDiario.put(hoy, trabajado);
+        trabajoTotal+=trabajado;
     }
 
     public void setFechaInicio(Date fecha) {
@@ -58,20 +70,44 @@ public class Actividad implements Serializable {
 
     public void setFechaFin(Date fecha) {
         fechaFinal = fecha;
+        terminado = true;
     }
 
     public void terminar() {
         fechaFinal = new Date();
+        terminado = true;
     }
 
     public String consultarInformacion() {
+        String ended = "En progreso";
+        if (terminado){
+            ended = "Terminado";
+        }
         String retorno = "Título: " + titulo +
                 "\nDescripción: " + descripcion +
-                "\nTipo: " + tipo +
+                "\nEstado: "+ended+
+                "\nTipo: " + tipoActividad +
                 "\nFecha de Inicio: " + fechaInicio +
                 "\n----------Tiempos de trabajo-----------------\n" +
-                infoDias();
+                infoDias()+
+                "\n------------Registros externos de actividad-------------\n"+
+                infoExtra();
         return (retorno);
+    }
+
+    private String infoExtra(){
+        String info = "";
+        int contador = 1;
+        for (Date[] array:  fechas) {
+            info+="\nRegistro "+ contador;
+            info+="\nDesde: "+array[0].toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            info+="\nHasta: "+array[1].toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            contador++;
+        }
+        if(info.equals("")){
+            info = "No se encuentran registros";
+        }
+        return info;
     }
 
     private String infoDias() {
@@ -80,6 +116,10 @@ public class Actividad implements Serializable {
         for (LocalDate dia : trabajoDiario.keySet()) {
             info += dia + ": ";
             info += trabajoDiario.get(dia) + " minutos";
+        }
+
+        if (info.equals("")){
+            info = "No se han encontrado sesiones de trabajo";
         }
         return info;
     }

@@ -17,50 +17,74 @@ public class Proyecto implements Serializable {
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFinal;
-    private HashMap<String,Actividad> actividades;
+    private HashMap<String, Actividad> actividades;
     private ArrayList<Participante> participantes;
     private Duenio duenio;
     private int id;
 
-    public Proyecto(String nombre, String descripcion, Duenio duenio, int id) {
+    private ArrayList<String> tipos;
+
+    public Proyecto(String nombre, String descripcion, Duenio duenio, int id, Date fechaFinal) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duenio = duenio;
         this.id = id;
+        this.fechaInicio = new Date();
+        this.fechaFinal = fechaFinal;
         actividades = new HashMap<>();
         participantes = new ArrayList<>();
+        tipos = new ArrayList<>();
+    }
+
+
+    public void addTipo(String tipo){
+        tipos.add(tipo);
+    }
+
+    public String getTipos() {
+        String retorno = "";
+        int posicion = 1;
+        for (String tipo : tipos) {
+            retorno += posicion +". "+ tipo+"\n";
+            posicion++;
+        }
+        return retorno;
+    }
+
+    public String getTipo(int pos) {
+        return tipos.get(pos - 1);
     }
 
     public void addActividad(Actividad actividad) {
-        actividades.put(actividad.getTitulo(),actividad);
+        actividades.put(actividad.getTitulo(), actividad);
     }
 
 
     public String darInfoActividades() {
         String retorno = "";
-        if (actividades.isEmpty()){
+        if (actividades.isEmpty()) {
             return "No hay actividades";
         }
 
-        int contador=1;
+        int contador = 1;
         for (String titulo : actividades.keySet()) {
             Actividad actividad = actividades.get(titulo);
-            retorno += "\nActividad "+contador+"\n";
-            retorno += actividad.consultarInformacion()+"\n";
+            retorno += "\nActividad " + contador + "\n";
+            retorno += actividad.consultarInformacion() + "\n";
             contador++;
         }
         return retorno;
     }
 
     public String darParticipantes() {
-        String retorno = "Dueño: "+duenio.getName();
-        if(participantes.isEmpty()){
-            retorno+="\nNo hay participantes";
+        String retorno = "Dueño: " + duenio.getName();
+        if (participantes.isEmpty()) {
+            retorno += "\nNo hay participantes";
             return retorno;
         }
-        int contador=1;
+        int contador = 1;
         for (Participante participante : participantes) {
-            retorno += "\nParticipante "+contador+"\n";
+            retorno += "\nParticipante " + contador + "\n";
             retorno += participante.consultarInformacion();
             contador++;
         }
@@ -82,15 +106,15 @@ public class Proyecto implements Serializable {
         return actividades.size();
     }
 
-    public Duenio getDuenio(){
+    public Duenio getDuenio() {
         return duenio;
     }
 
-    public void addParticipante(Participante participante){
+    public void addParticipante(Participante participante) {
         participantes.add(participante);
     }
 
-    public Actividad getActividad(String titulo){
+    public Actividad getActividad(String titulo) {
         return actividades.get(titulo);
     }
 }

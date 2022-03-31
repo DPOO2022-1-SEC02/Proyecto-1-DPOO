@@ -3,7 +3,6 @@ package src.consola;
 import src.actividad.Actividad;
 import src.proyecto.PrManager;
 import src.proyecto.Proyecto;
-import src.tipoActividad;
 import src.usuario.Duenio;
 import src.usuario.Participante;
 import src.usuario.Usuario;
@@ -30,7 +29,6 @@ public class Consola implements Serializable {
         consola.ejecutarOpcion();
 
 
-
     }
 
     private void mostrarMenu() {
@@ -46,13 +44,22 @@ public class Consola implements Serializable {
                 6. Generar un reporte de usuario.
                 0. Salir de la aplicación.""");
 
-
-
-
     }
 
 
-    private void identificarUsuario() {
+    private void identificarUsuario() throws Exception {
+
+        try {
+
+            FileInputStream file = new FileInputStream("guardado.ser");
+            ObjectInputStream in = new ObjectInputStream(file);
+            manager = (PrManager) in.readObject();
+            System.out.println("Info cargada");
+        } catch (IOException ex) {
+            System.out.println("No se han podido cargar datos anteriores. ");
+        }
+
+
         System.out.println("¡Bienvenido :D! Para empezar ingresa tus datos");
         String nombre = input("Escribe tu nombre");
         String correo = input("Escribe tu dirección de correo");
@@ -62,23 +69,10 @@ public class Consola implements Serializable {
 
     private void ejecutarOpcion() throws Exception {
 
-        try{
-
-        FileInputStream file = new FileInputStream("guardado.ser");
-        ObjectInputStream in = new ObjectInputStream(file);
-        manager = (PrManager)in.readObject();
-            System.out.println("Info cargada");
-        }
-        catch (IOException ex){
-            System.out.println("IOException");
-        }
-
-
-
         boolean continuar = true;
         while (continuar) {
             mostrarMenu();
-            int opcion = Integer.parseInt(input("Por favor selecciona una opcion"));
+            int opcion = Integer.parseInt(input("Por favor selecciona una opción"));
             switch (opcion) {
                 case 1 -> crearProyecto();
                 case 2 -> darProyecto();
@@ -92,7 +86,7 @@ public class Consola implements Serializable {
                     out.close();
                     file.close();
                     System.out.println("Info guardada.");
-                    continuar=false;
+                    continuar = false;
                 }
             }
             System.out.println("\n");
@@ -100,20 +94,46 @@ public class Consola implements Serializable {
     }
 
 
-    private void crearProyecto() {
-        String nombre, descripcion;
+    private void crearProyecto() throws Exception {
+        String nombre, descripcion, strFecha;
         nombre = input("Escribe el nombre del proyecto");
         descripcion = input("Escribe la descripción del proyecto");
 
         String nameD = input("Ingresa el nombre del dueño");
         String emailD = input("Ingresa el correo del dueño");
         Duenio duenio = new Duenio(nameD, emailD);
-        manager.crearProyecto(nombre,descripcion,duenio);
+
+        Date fechaFin;
+
+        strFecha = input("Escriba la fecha estimada de finalización (dia/mes/año)");
+        fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+
+        manager.crearProyecto(nombre, descripcion, duenio, fechaFin);
+
+        definirTipos();
 
         System.out.println("Proyecto creado exitosamente. El id es: " + cantidadProyectos);
         cantidadProyectos++;
     }
 
+
+    private void definirTipos(){
+        String tipo;
+        boolean continuar = true;
+        while (continuar){
+            int seleccionado = Integer.parseInt(input("""
+                    1. Crear un Tipo
+                    2. Terminar
+                    Selecciona una opcion"""));
+            if (seleccionado==1){
+                tipo  = input("Escribe el tipo de actividad que quieres agregar");
+                manager.getProyecto(cantidadProyectos).addTipo(tipo);
+            }
+            else{
+                continuar=false;
+            }
+        }
+    }
 
     private void darProyecto() {
         int id;
@@ -164,24 +184,43 @@ public class Consola implements Serializable {
         int opcion = Integer.parseInt(input("""
                 1. A nombre propio
                 2. Hecha por otra persona"""));
-        String nombre, descripcion, strFecha;
-        Date fechaFin;
+        String nombre, descripcion;
 
 
+        Proyecto prActual = usuarioActual.getPrActual();
         nombre = input("Escribe el nombre de la actividad");
+
+
+
+
+        if (prActual.getActividad(nombre) != null) {
+            System.out.println("Redirigiendo al menu para añadir registros de trabajo extra...");
+
+            String strFin, strInicio;
+            Date fechaFin, fechaInicio;
+
+            strInicio = input("Escriba la fecha de inicio (dia/mes/año)");
+            fechaInicio = new SimpleDateFormat("dd/MM/yyyy").parse(strInicio);
+
+            strFin = input("Escriba la fecha de finalización (dia/mes/año)");
+            fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFin);
+
+            Actividad actividad = prActual.getActividad(nombre);
+            actividad.nuevoRegistro(fechaInicio, fechaFin);
+            return;
+        }
+
+
         descripcion = input("Escribe la descripción de la actividad");
-        strFecha = input("Escriba la fecha estimada de finalización (dia/mes/año)");
-        fechaFin = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+        System.out.println(prActual.getTipos());
 
-        //TODO hacer algo para poder seleccionar el tipo de actividad
-        tipoActividad tipo = tipoActividad.Documentacion;
-
-
+        int pos = Integer.parseInt(input("Escribe el tipo que deseas usar"));
+        String tipo = prActual.getTipo(pos);
         if (opcion == 1) {
-            usuarioActual.inciarActividad(nombre, tipo, descripcion, fechaFin);
+            usuarioActual.inciarActividad(nombre, tipo, descripcion);
         } else {
             String correo = input("Escribe el correo del usuario");
-            usuarioActual.iniciarActividadExt(correo, nombre, tipo, descripcion, fechaFin);
+            usuarioActual.iniciarActividadExt(correo, nombre, tipo, descripcion);
         }
 
     }
