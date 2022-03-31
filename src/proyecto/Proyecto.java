@@ -2,12 +2,9 @@ package src.proyecto;
 
 
 import src.actividad.Actividad;
-import src.usuario.Duenio;
-import src.usuario.Participante;
+import src.usuario.Usuario;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,13 +15,13 @@ public class Proyecto implements Serializable {
     private Date fechaInicio;
     private Date fechaFinal;
     private HashMap<String, Actividad> actividades;
-    private ArrayList<Participante> participantes;
-    private Duenio duenio;
+    private ArrayList<Usuario> participantes;
+    private Usuario duenio;
     private int id;
 
     private ArrayList<String> tipos;
 
-    public Proyecto(String nombre, String descripcion, Duenio duenio, int id, Date fechaFinal) {
+    public Proyecto(String nombre, String descripcion, Usuario duenio, int id, Date fechaFinal) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duenio = duenio;
@@ -34,10 +31,11 @@ public class Proyecto implements Serializable {
         actividades = new HashMap<>();
         participantes = new ArrayList<>();
         tipos = new ArrayList<>();
+        addParticipante(duenio);
     }
 
 
-    public void addTipo(String tipo){
+    public void addTipo(String tipo) {
         tipos.add(tipo);
     }
 
@@ -45,7 +43,7 @@ public class Proyecto implements Serializable {
         String retorno = "";
         int posicion = 1;
         for (String tipo : tipos) {
-            retorno += posicion +". "+ tipo+"\n";
+            retorno += posicion + ". " + tipo + "\n";
             posicion++;
         }
         return retorno;
@@ -53,6 +51,15 @@ public class Proyecto implements Serializable {
 
     public String getTipo(int pos) {
         return tipos.get(pos - 1);
+    }
+
+    public boolean participanteExiste(String mail) {
+        for (Usuario participante : participantes) {
+            if (mail.equals(participante.getEmail())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addActividad(Actividad actividad) {
@@ -83,7 +90,7 @@ public class Proyecto implements Serializable {
             return retorno;
         }
         int contador = 1;
-        for (Participante participante : participantes) {
+        for (Usuario participante : participantes) {
             retorno += "\nParticipante " + contador + "\n";
             retorno += participante.consultarInformacion();
             contador++;
@@ -106,11 +113,11 @@ public class Proyecto implements Serializable {
         return actividades.size();
     }
 
-    public Duenio getDuenio() {
+    public Usuario getDuenio() {
         return duenio;
     }
 
-    public void addParticipante(Participante participante) {
+    public void addParticipante(Usuario participante) {
         participantes.add(participante);
     }
 

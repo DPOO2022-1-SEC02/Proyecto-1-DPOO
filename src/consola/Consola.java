@@ -3,8 +3,6 @@ package src.consola;
 import src.actividad.Actividad;
 import src.proyecto.PrManager;
 import src.proyecto.Proyecto;
-import src.usuario.Duenio;
-import src.usuario.Participante;
 import src.usuario.Usuario;
 
 import java.io.*;
@@ -80,17 +78,21 @@ public class Consola implements Serializable {
                 case 4 -> mostrarInfoActividades();
                 case 5 -> mostrarParticipantes();
                 case 0 -> {
-                    FileOutputStream file = new FileOutputStream("guardado.ser");
-                    ObjectOutputStream out = new ObjectOutputStream(file);
-                    out.writeObject(manager);
-                    out.close();
-                    file.close();
-                    System.out.println("Info guardada.");
+                    guardarInfo();
                     continuar = false;
                 }
             }
             System.out.println("\n");
         }
+    }
+
+    private void guardarInfo() throws Exception {
+        FileOutputStream file = new FileOutputStream("guardado.ser");
+        ObjectOutputStream out = new ObjectOutputStream(file);
+        out.writeObject(manager);
+        out.close();
+        file.close();
+        System.out.println("Info guardada.");
     }
 
 
@@ -101,7 +103,7 @@ public class Consola implements Serializable {
 
         String nameD = input("Ingresa el nombre del dueño");
         String emailD = input("Ingresa el correo del dueño");
-        Duenio duenio = new Duenio(nameD, emailD);
+        Usuario duenio = new Usuario(nameD, emailD);
 
         Date fechaFin;
 
@@ -117,20 +119,19 @@ public class Consola implements Serializable {
     }
 
 
-    private void definirTipos(){
+    private void definirTipos() {
         String tipo;
         boolean continuar = true;
-        while (continuar){
+        while (continuar) {
             int seleccionado = Integer.parseInt(input("""
                     1. Crear un Tipo
                     2. Terminar
                     Selecciona una opcion"""));
-            if (seleccionado==1){
-                tipo  = input("Escribe el tipo de actividad que quieres agregar");
+            if (seleccionado == 1) {
+                tipo = input("Escribe el tipo de actividad que quieres agregar");
                 manager.getProyecto(cantidadProyectos).addTipo(tipo);
-            }
-            else{
-                continuar=false;
+            } else {
+                continuar = false;
             }
         }
     }
@@ -191,8 +192,6 @@ public class Consola implements Serializable {
         nombre = input("Escribe el nombre de la actividad");
 
 
-
-
         if (prActual.getActividad(nombre) != null) {
             System.out.println("Redirigiendo al menu para añadir registros de trabajo extra...");
 
@@ -216,14 +215,33 @@ public class Consola implements Serializable {
 
         int pos = Integer.parseInt(input("Escribe el tipo que deseas usar"));
         String tipo = prActual.getTipo(pos);
+
+
         if (opcion == 1) {
+
+            checkParticipante(prActual, usuarioActual.getEmail());
             usuarioActual.inciarActividad(nombre, tipo, descripcion);
         } else {
             String correo = input("Escribe el correo del usuario");
+            checkParticipante(prActual, correo);
             usuarioActual.iniciarActividadExt(correo, nombre, tipo, descripcion);
         }
+        System.out.println("Actividad iniciada exitosamente.");
 
     }
+
+    private void checkParticipante(Proyecto prActual, String mail) {
+        if (!prActual.participanteExiste(mail)) {
+            System.out.println("El participante no es parte del proyecto, ¿deseas agregarlo?");
+            int seleccion = Integer.parseInt(input("""
+                    1.Si
+                    2.No"""));
+            if (seleccion == 1) {
+                agregarParticipantes();
+            }
+        }
+    }
+
 
     private void terminarActividad() {
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
@@ -243,12 +261,12 @@ public class Consola implements Serializable {
     private void agregarParticipantes() {
         int id = Integer.parseInt(input("Escribe el id del proyecto al que quieres añadir participantes"));
         Proyecto prActual = manager.getProyecto(id);
-        Duenio duenio = prActual.getDuenio();
+        Usuario duenio = prActual.getDuenio();
         if (usuarioActual.equals(duenio)) {
             String nombre, correo;
             nombre = input("Escribe el nombre del nuevo usuario");
             correo = input("Escribe el correo del nuevo usuario");
-            Participante agregar = new Participante(nombre, correo);
+            Usuario agregar = new Usuario(nombre, correo);
             prActual.addParticipante(agregar);
         } else {
             System.out.println("Para hacer esto debes ser el dueño del proyecto.");
@@ -309,8 +327,7 @@ public class Consola implements Serializable {
         int id = Integer.parseInt(input("Escribe el id del proyecto"));
         String titulo = input("Escribe el título de la actividad");
         Proyecto actual = manager.getProyecto(id);
-        Actividad actualAc = actual.getActividad(titulo);
-        return actualAc;
+        return actual.getActividad(titulo);
     }
 
     public String input(String mensaje) {
