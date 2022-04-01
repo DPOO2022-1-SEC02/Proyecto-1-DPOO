@@ -83,12 +83,16 @@ public class Actividad implements Serializable {
         if (terminado) {
             ended = "Terminado";
         }
+        if (fechaFinal == null) {
+        	String fechaFinal = "Actividad todavia en curso";
+        }
         String retorno = "Título: " + titulo +
         		"\nCreador: " + nombre +
                 "\nDescripción: " + descripcion +
                 "\nEstado: " + ended +
                 "\nTipo: " + tipoActividad +
                 "\nFecha de Inicio: " + fechaInicio +
+                "\nFecha de Finalizacion: "+ fechaFinal +
                 "\n----------Tiempos de trabajo-----------------\n" +
                 infoDias() +
                 "\n------------Registros externos de actividad-------------\n" +

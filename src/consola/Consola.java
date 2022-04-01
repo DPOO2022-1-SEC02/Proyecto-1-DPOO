@@ -1,14 +1,14 @@
 package consola;
 
-import modelo.Actividad;
-import modelo.PrManager;
-import modelo.Proyecto;
-import modelo.Usuario;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+import modelo.Actividad;
+import modelo.PrManager;
+import modelo.Proyecto;
+import modelo.Usuario;
 
 public class Consola implements Serializable {
 
@@ -244,6 +244,7 @@ public class Consola implements Serializable {
         Proyecto prActual = manager.getProyecto(id);
         Actividad acActual = prActual.getActividad(tituloA);
         acActual.terminar();
+        System.out.println("Actividad terminada! \n");
     }
 
 
