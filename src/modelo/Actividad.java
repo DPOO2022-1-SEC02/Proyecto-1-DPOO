@@ -1,4 +1,4 @@
-package src.modelo;
+package modelo;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class Actividad implements Serializable {
     private final String titulo;
     private final String descripcion;
+    private final String nombre;
     private final String correo;
     private String tipoActividad;
     private Date fechaInicio;
@@ -24,9 +25,10 @@ public class Actividad implements Serializable {
     private boolean terminado;
 
 
-    public Actividad(String correo, String titulo, String descripcion, String tipoActividad, int id) {
+    public Actividad(String correo, String titulo,String nombre, String descripcion, String tipoActividad, int id) {
         this.titulo = titulo;
         this.descripcion = descripcion;
+        this.nombre = nombre;
         this.tipoActividad = tipoActividad;
         this.correo = correo;
         fechaInicio = new Date();
@@ -82,6 +84,7 @@ public class Actividad implements Serializable {
             ended = "Terminado";
         }
         String retorno = "Título: " + titulo +
+        		"\nCreador: " + nombre +
                 "\nDescripción: " + descripcion +
                 "\nEstado: " + ended +
                 "\nTipo: " + tipoActividad +

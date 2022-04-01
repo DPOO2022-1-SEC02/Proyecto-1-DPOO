@@ -1,4 +1,4 @@
-package src.modelo;
+package modelo;
 
 
 import java.io.Serializable;
@@ -100,9 +100,11 @@ public class Proyecto implements Serializable {
     }
 
     public String darInfoProyecto() {
+    	
         return ("\nNombre: " + nombre + "\nDescripción: " + descripcion
                 + "\nid: " + id + "\nDueño: " + duenio.getName()
-                + "\nCantidad de actividades:" + actividades.size() + "\n");
+                + "\nCantidad de actividades:" + actividades.size() 
+                + "Cantidad de participantes: " + participantes.size() + "\n");
 
     }
 

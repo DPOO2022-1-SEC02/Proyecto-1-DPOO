@@ -1,4 +1,4 @@
-package src.modelo;
+package modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,13 +33,13 @@ public class Usuario implements Serializable {
     }
 
     public void inciarActividad(String nombreActividad, String tipoActividad, String descripcion) {
-        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipoActividad, prActual.getActividadesSize());
+        Actividad actividad = new Actividad(correo, nombreActividad, nombre, descripcion, tipoActividad, prActual.getActividadesSize());
         prActual.addActividad(actividad);
         actividades.add(actividad);
     }
 
     public void iniciarActividadExt(String correo, String nombreActividad, String tipoActividad, String descripcion) {
-        Actividad actividad = new Actividad(correo, nombreActividad, descripcion, tipoActividad, prActual.getActividadesSize());
+        Actividad actividad = new Actividad(correo, nombreActividad,nombre, descripcion, tipoActividad, prActual.getActividadesSize());
         prActual.addActividad(actividad);
     }
 
