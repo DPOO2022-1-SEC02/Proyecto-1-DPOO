@@ -1,9 +1,9 @@
-package consola;
+package src.consola;
 
-import modelo.Actividad;
-import modelo.PrManager;
-import modelo.Proyecto;
-import modelo.Usuario;
+import src.modelo.Actividad;
+import src.modelo.PrManager;
+import src.modelo.Proyecto;
+import src.modelo.Usuario;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
