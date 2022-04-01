@@ -12,6 +12,7 @@ public class Proyecto implements Serializable {
     private Date fechaInicio;
     private Date fechaFinal;
     private HashMap<String, Actividad> actividades;
+    private HashMap<String, Usuario> participantesMap;
     private ArrayList<Usuario> participantes;
     private Usuario duenio;
     private int id;
@@ -58,7 +59,7 @@ public class Proyecto implements Serializable {
         }
         return false;
     }
-
+    
     public void addActividad(Actividad actividad) {
         actividades.put(actividad.getTitulo(), actividad);
     }
@@ -118,9 +119,13 @@ public class Proyecto implements Serializable {
 
     public void addParticipante(Usuario participante) {
         participantes.add(participante);
+        participantesMap.put(participante.getEmail(),participante);
     }
-
+    public Usuario getParticipante(String mail) {
+    	return participantesMap.get(mail);
+    }
     public Actividad getActividad(String titulo) {
         return actividades.get(titulo);
     }
+    
 }

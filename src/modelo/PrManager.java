@@ -22,5 +22,10 @@ public class PrManager implements Serializable {
     public Proyecto getProyecto(int id) {
         return proyectos.get(id);
     }
+        
+    public int getId()
+        {
+            return proyectos.size();
+        }
 
 }

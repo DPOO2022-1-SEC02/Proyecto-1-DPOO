@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Actividad implements Serializable {
     private final String titulo;
@@ -53,6 +54,12 @@ public class Actividad implements Serializable {
     public String getTitulo() {
         return titulo;
     }
+    public int getTrabTotal() {
+    	return trabajoTotal;
+    }
+    public String getTipo() {
+    	return tipoActividad;
+    }
 
     public void stopCronometro() {
         ends = Instant.now();
@@ -62,6 +69,16 @@ public class Actividad implements Serializable {
         trabajado += tiempoTrabajo;
         trabajoDiario.put(hoy, trabajado);
         trabajoTotal += trabajado;
+    }
+    
+    public void sumarTiempo(HashMap<LocalDate, Integer> tiempoTotal){
+        int tiempo ,tiempoSuma;
+        for(LocalDate fecha:trabajoDiario.keySet()){
+            tiempo = trabajoDiario.get(fecha);
+            tiempoSuma = tiempoTotal.getOrDefault(fecha, 0);
+            tiempoSuma += tiempo;
+            tiempoTotal.put(fecha,tiempoSuma);
+        }
     }
 
     public void setFechaInicio(Date fecha) {
