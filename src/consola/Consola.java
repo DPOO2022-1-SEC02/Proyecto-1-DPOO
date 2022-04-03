@@ -36,6 +36,7 @@ public class Consola implements Serializable {
 				4. Ver información de las actividades de un proyecto.
 				5. Ver los participantes de un proyecto.
 				6. Generar un reporte de usuario.
+				7. Guardar informacion.
 				0. Salir de la aplicación.""");
 
 	}
@@ -72,6 +73,7 @@ public class Consola implements Serializable {
 			case "3" -> editarProyecto();
 			case "4" -> mostrarInfoActividades();
 			case "5" -> mostrarParticipantes();
+			case "7" -> guardarInfo();
 			case "0" -> {
 				guardarInfo();
 				continuar = false;
