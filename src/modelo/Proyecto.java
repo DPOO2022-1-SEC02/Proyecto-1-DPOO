@@ -16,7 +16,6 @@ public class Proyecto implements Serializable {
     private ArrayList<Usuario> participantes;
     private Usuario duenio;
     private int id;
-
     private ArrayList<String> tipos;
 
     public Proyecto(String nombre, String descripcion, Usuario duenio, int id, Date fechaFinal) {
@@ -127,6 +126,10 @@ public class Proyecto implements Serializable {
     }
     public Actividad getActividad(String titulo) {
         return actividades.get(titulo);
+    }
+    
+    public void  updateParticipante(Usuario usuario){
+        participantesMap.put(usuario.getEmail(),usuario);
     }
     
 }

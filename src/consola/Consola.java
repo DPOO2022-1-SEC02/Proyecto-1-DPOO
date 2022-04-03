@@ -47,6 +47,8 @@ public class Consola implements Serializable {
 
 			FileInputStream file = new FileInputStream("data/guardado.ser");
 			ObjectInputStream in = new ObjectInputStream(file);
+			file.close();
+			in.close();
 			manager = (PrManager) in.readObject();
 			System.out.println("Info cargada");
 		} catch (Exception ex) {
@@ -109,9 +111,10 @@ public class Consola implements Serializable {
 
 		manager.crearProyecto(nombre, descripcion, duenio, fechaFin);
 
+		idProyecto = manager.getId() -1;
 		definirTipos();
 		
-		idProyecto = manager.getId();
+
 		System.out.println("Proyecto creado exitosamente.\nEl id es: " + idProyecto);
 	}
 
@@ -126,9 +129,11 @@ public class Consola implements Serializable {
 			if (seleccionado == 1) {
 				tipo = input("Escribe el tipo de actividad que quieres agregar");
 				manager.getProyecto(idProyecto).addTipo(tipo);
+
 			} else {
 				continuar = false;
 			}
+			
 		}
 	}
 

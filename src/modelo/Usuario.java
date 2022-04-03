@@ -45,26 +45,36 @@ public class Usuario implements Serializable {
     	tiempoPorTipo = reporte.tiempoTrabajoTipo();
     	numActividades = reporte.cantActividades();
     	
-    	reporteTxt += "Tiempo total trabajado" + " : "+ tiempoTotalTrabajo +"\n";
-    	reporteTxt += "Numero total de actividades trabajadas es: " + numActividades+"\n";
+    	reporteTxt += "Numero total de actividades trabajadas es: " + numActividades+" \n";
+    	reporteTxt += "Tiempo total trabajado" + " : "+ tiempoTotalTrabajo +" mins\n";
     	reporteTxt+="Tiempo trabajado diariamente: \n";
 
-    	
-    	for (LocalDate fecha : tiempoPorDia.keySet()) {
-			tiempo = tiempoPorDia.get(fecha);
-			reporteTxt+="\t-"+fecha+": "+tiempo+"\n";
-		
-			
-		}
+    	if(tiempoPorDia.isEmpty()) {
+    		reporteTxt += "  - No hay tiempo por dia registrado\n";
+    		
+    	}
+    	else {
+        	for (LocalDate fecha : tiempoPorDia.keySet()) {
+    			tiempo = tiempoPorDia.get(fecha);
+    			reporteTxt+="  - "+fecha+": "+tiempo+" mins\n";			
+    		}
+    	}
+
     	
     	reporteTxt += "El tiempo de trabajo por tipo de actividad es: \n";
-    	for (String tipo : tiempoPorTipo.keySet()) {
-    		tiempoTipo = tiempoPorTipo.get(tipo);
-    		reporteTxt += "\t-"+ tipo + ": "+ tiempoTipo +"\n";
+    	if (tiempoPorTipo.isEmpty()) {
+    		reporteTxt += "  - No hay tiempo por tipo de actividad registrado\n";
     		
-    		 
-		}
+    	}
+    	
+    	else {
+	    	for (String tipo : tiempoPorTipo.keySet()) {
+	    		tiempoTipo = tiempoPorTipo.get(tipo);
+	    		reporteTxt += "  - "+ tipo + ": "+ tiempoTipo +" mins\n"; 
+			}
+	    }
     	reporteTxt += "--- Fin del reporte ---";
+    	
     	return reporteTxt;
     	
     	
@@ -74,13 +84,17 @@ public class Usuario implements Serializable {
         Actividad actividad = new Actividad(correo, nombreActividad, nombre, descripcion, tipoActividad, prActual.getActividadesSize());
         prActual.addActividad(actividad);
         actividades.add(actividad);
+        prActual.updateParticipante(this);
     }
 
     public void iniciarActividadExt(String correo, String nombreActividad, String tipoActividad, String descripcion) {
         Actividad actividad = new Actividad(correo, nombreActividad,nombre, descripcion, tipoActividad, prActual.getActividadesSize());
-        prActual.addActividad(actividad);
-        actividades.add(actividad);
+        Usuario otro = prActual.getParticipante(correo);
+     	prActual.addActividad(actividad);
+     	otro.addActividad(actividad);
+     	prActual.updateParticipante(otro);
     }
+
 
     public String consultarInformacion() {
         return ("Nombre: " + nombre
