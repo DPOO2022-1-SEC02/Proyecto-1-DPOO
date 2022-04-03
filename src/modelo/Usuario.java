@@ -9,9 +9,7 @@ public class Usuario implements Serializable {
     protected String nombre;
     protected String correo;
     protected Proyecto prActual;
-
-
-    private ArrayList<Actividad> actividades = new ArrayList<>();
+    private ArrayList<Actividad> actividades;
 
     @Override
     public boolean equals(Object usuario2) {
@@ -28,10 +26,13 @@ public class Usuario implements Serializable {
     public Usuario(String nombre, String correo) {
         this.nombre = nombre;
         this.correo = correo;
+        actividades = new ArrayList<>();
+       
     }
 
     public String generarReporte() {
-        String reporteTxt ="--- Inicio del reporte ---";
+    	System.out.println(actividades);
+        String reporteTxt ="--- Inicio del reporte ---\n";
         int tiempoTotalTrabajo,tiempo,tiempoTipo;
         HashMap<LocalDate, Integer> tiempoPorDia;
         HashMap<String,Integer> tiempoPorTipo;
@@ -47,6 +48,8 @@ public class Usuario implements Serializable {
     	reporteTxt += "Tiempo total trabajado" + " : "+ tiempoTotalTrabajo +"\n";
     	reporteTxt += "Numero total de actividades trabajadas es: " + numActividades+"\n";
     	reporteTxt+="Tiempo trabajado diariamente: \n";
+
+    	
     	for (LocalDate fecha : tiempoPorDia.keySet()) {
 			tiempo = tiempoPorDia.get(fecha);
 			reporteTxt+="\t-"+fecha+": "+tiempo+"\n";
@@ -54,7 +57,7 @@ public class Usuario implements Serializable {
 			
 		}
     	
-    	reporteTxt += "El tiempo de trabajo por tipo de actividad es : \n";
+    	reporteTxt += "El tiempo de trabajo por tipo de actividad es: \n";
     	for (String tipo : tiempoPorTipo.keySet()) {
     		tiempoTipo = tiempoPorTipo.get(tipo);
     		reporteTxt += "\t-"+ tipo + ": "+ tiempoTipo +"\n";
@@ -76,6 +79,7 @@ public class Usuario implements Serializable {
     public void iniciarActividadExt(String correo, String nombreActividad, String tipoActividad, String descripcion) {
         Actividad actividad = new Actividad(correo, nombreActividad,nombre, descripcion, tipoActividad, prActual.getActividadesSize());
         prActual.addActividad(actividad);
+        actividades.add(actividad);
     }
 
     public String consultarInformacion() {

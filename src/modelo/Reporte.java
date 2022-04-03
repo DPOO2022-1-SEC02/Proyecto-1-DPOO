@@ -14,6 +14,8 @@ public class Reporte {
 	public Reporte(ArrayList<Actividad> actividades) 
 	{
 		
+		tiempoPorDia = new HashMap<>();
+		tiempoPorTipo = new HashMap<>();
 		for (Actividad actividad: actividades) {
 			trabajoTotal = actividad.getTrabTotal();
 			tiempoTotal += trabajoTotal;

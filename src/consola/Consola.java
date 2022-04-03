@@ -73,6 +73,7 @@ public class Consola implements Serializable {
 			case "3" -> editarProyecto();
 			case "4" -> mostrarInfoActividades();
 			case "5" -> mostrarParticipantes();
+			case "6" -> generarReporte();
 			case "7" -> guardarInfo();
 			case "0" -> {
 				guardarInfo();
@@ -119,7 +120,7 @@ public class Consola implements Serializable {
 		boolean continuar = true;
 		while (continuar) {
 			int seleccionado = Integer.parseInt(input("""
-					1. Crear un Tipo
+					1. Crear un tipo de actividad
 					2. Terminar
 					Selecciona una opcion"""));
 			if (seleccionado == 1) {
@@ -206,7 +207,7 @@ public class Consola implements Serializable {
 		descripcion = input("Escribe la descripción de la actividad");
 		System.out.println(prActual.getTipos());
 
-		int pos = Integer.parseInt(input("Escribe el tipo que deseas usar"));
+		int pos = Integer.parseInt(input("Escribe el tipo de actividad que deseas usar"));
 		String tipo = prActual.getTipo(pos);
 
 		if (opcion == 1) {
@@ -343,9 +344,10 @@ public class Consola implements Serializable {
     	boolean existe = prActual.participanteExiste(correo);
     	if (existe) {
     		Usuario reportado = prActual.getParticipante(correo);
-    		reportado.generarReporte();
-    		System.out.println("El reporte para el usuario con correo" + correo +"es: "
-    				+ "\n Tiempo total de trabajo: ");
+    		
+    		String reporte = reportado.generarReporte();
+    		System.out.println("El reporte para el usuario con correo " + correo +" es: ");
+    		System.out.println(reporte);
     	}
     	else
     		System.out.println("Participante no esta registrado");
