@@ -109,7 +109,7 @@ public class Consola implements Serializable {
 		definirTipos();
 		
 		idProyecto = manager.getId();
-		System.out.println("Proyecto creado exitosamente. El id es" + idProyecto);
+		System.out.println("Proyecto creado exitosamente.\nEl id es: " + idProyecto);
 	}
 
 	private void definirTipos() {

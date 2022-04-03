@@ -25,7 +25,7 @@ public class PrManager implements Serializable {
         
     public int getId()
         {
-            return proyectos.size();
+            return proyectos.size() - 1;
         }
 
 }

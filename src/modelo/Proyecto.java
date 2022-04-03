@@ -28,6 +28,7 @@ public class Proyecto implements Serializable {
         this.fechaFinal = fechaFinal;
         actividades = new HashMap<>();
         participantes = new ArrayList<>();
+        participantesMap = new HashMap<>();
         tipos = new ArrayList<>();
         addParticipante(duenio);
     }
@@ -104,8 +105,8 @@ public class Proyecto implements Serializable {
     	
         return ("\nNombre: " + nombre + "\nDescripción: " + descripcion
                 + "\nid: " + id + "\nDueño: " + duenio.getName()
-                + "\nCantidad de actividades:" + actividades.size() 
-                + "Cantidad de participantes: " + participantes.size() + "\n");
+                + "\nCantidad de actividades: " + actividades.size() 
+                + "\nCantidad de participantes: " + participantes.size() + "\n");
 
     }
 
